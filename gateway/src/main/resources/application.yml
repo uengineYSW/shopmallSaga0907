@@ -5,7 +5,7 @@ server:
 
 
 keycloak-client:
-  server-url: http://localhost:9090
+  server-url: https://9090-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/auth
   realm: master
 
 spring:
@@ -26,13 +26,13 @@ spring:
           predicates:
             - Path= /shopmalls/**
         - id: frontend
-          uri: http://localhost:8080
+          uri: http://localhost:8081
           predicates:
             - Path=/**
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins:
+            allowedOriginPatterns:
               - "*"
             allowedMethods:
               - "*"
@@ -43,19 +43,19 @@ spring:
     oauth2:
       client:
         provider:
-          keycloak:
-            issuer-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}
+          keycloak: 
+            issuer-uri: https://8080-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/realms/master
             user-name-attribute: preferred_username
         registration:
           keycloak:
-            client-id: "<client-id>"
-            client-secret: "<client-secret>"
-            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+            client-id: master
+            client-secret: 
+            redirect-uri: https://8088-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/login/oauth2/code/master
             authorization-grant-type: authorization_code
             scope: openid
       resourceserver:
-        jwt:
-          jwk-set-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/certs
+        jwt:          
+          jwk-set-uri: https://8080-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/realms/master/protocol/openid-connect/certs
 
 ---
 

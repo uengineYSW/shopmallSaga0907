@@ -1,4 +1,5 @@
-<template>
+
+<template>
     <div>
         <h1 style = "margin-left:4.5%; margin-top:-10px;">Order</h1>
         <v-col style="margin-bottom:40px;">
@@ -40,7 +41,7 @@
 
 <script>
 
-    const axios = require('axios').default;
+    //const axios = require('axios').default;
     import Order from './../Order.vue';
 
     export default {
@@ -64,14 +65,16 @@
                 return;
             } 
 
-            var temp = await axios.get(axios.fixUrl('/orders'))
-            me.values = temp.data._embedded.orders;
+            //var temp = await axios.get(axios.fixUrl('/orders'))
+            //me.values = temp.data._embedded.orders;
             
             me.newValue = {
-                'productId': 0,
-                'qty': 0,
-                'productName': '',
+                'productId': 10,
+                'qty': 15,
+                'productName': 'test1',
             }
+
+            me.values.push(me.newValue)
         },
         methods:{
             closeDialog(){

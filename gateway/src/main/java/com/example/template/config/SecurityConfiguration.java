@@ -7,8 +7,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
-@EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
+@Configuration
 public class SecurityConfiguration {
 
     @Bean
@@ -17,6 +16,7 @@ public class SecurityConfiguration {
     ) {
         http
             .authorizeExchange()
+            //.pathMatchers("/products/**","/goods/**","/oauth/**","/login/**", "/open/**").permitAll()
             .anyExchange()
             .authenticated()
             .and()

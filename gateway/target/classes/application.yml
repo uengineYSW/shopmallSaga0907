@@ -3,6 +3,11 @@ server:
 
 ---
 
+
+keycloak-client:
+  server-url: https://9090-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/auth
+  realm: master
+
 spring:
   profiles: default
   cloud:
@@ -11,54 +16,83 @@ spring:
         - id: order
           uri: http://localhost:8081
           predicates:
-            - Path=/orders/**, 
+            - Path=/orders/** 
         - id: delivery
           uri: http://localhost:8082
           predicates:
-            - Path=/deliveries/**, 
+            - Path=/deliveries/** 
         - id: showview
           uri: http://localhost:8083
           predicates:
-            - Path=, /shopmalls/**
+            - Path= /shopmalls/**
         - id: frontend
-          uri: http://localhost:8080
+          uri: http://localhost:8081
           predicates:
             - Path=/**
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins:
+            allowedOriginPatterns:
               - "*"
             allowedMethods:
               - "*"
             allowedHeaders:
               - "*"
             allowCredentials: true
-
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak: 
+            issuer-uri: https://8080-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/realms/master
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: master
+            client-secret: 
+            redirect-uri: https://8088-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/login/oauth2/code/master
+            authorization-grant-type: authorization_code
+            scope: openid
+      resourceserver:
+        jwt:          
+          jwk-set-uri: https://8080-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/realms/master/protocol/openid-connect/certs
 
 ---
 
 spring:
   profiles: docker
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: "<client-id>"
+            client-secret: "<client-secret>"
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+            authorization-grant-type: authorization_code
+            scope: openid
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/certs
   cloud:
     gateway:
       routes:
         - id: order
           uri: http://order:8080
           predicates:
-            - Path=/orders/**, 
+            - Path=/orders/** 
         - id: delivery
           uri: http://delivery:8080
           predicates:
-            - Path=/deliveries/**, 
+            - Path=/deliveries/** 
         - id: showview
           uri: http://showview:8080
           predicates:
-            - Path=, /shopmalls/**
-        - id: frontend
-          uri: http://frontend:8080
-          predicates:
-            - Path=/**
+            - Path= /shopmalls/**
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -72,4 +106,3 @@ spring:
 
 server:
   port: 8080
-

@@ -65,7 +65,7 @@ Vue.prototype.$ManagerLists.forEach(function(item, idx) {
 })
 
 let initOptions = {
-  url: `http://localhost:9090/`,
+  url: `https://8080-uengineysw-shopmallsaga-qitzcr18b7u.ws-us63.gitpod.io/`,
   realm: `master`,
   clientId: `master`,
   onLoad: `login-required`,
